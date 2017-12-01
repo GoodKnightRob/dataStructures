@@ -4,36 +4,37 @@ public class WeightedQuickUnion{
     private int count; // number of connected components
     
 // Constructor with the number of elements a paramenter
-    public WeightedQuickUnionUF(int N) { 
-        count = N;// sets the number of elements as the count
-        id = new int[N];// initialization of array to identify parents
-        sz = new int[N];//initialization of array that identifies the size the node
+    public WeightedQuickUnion(int N) { 
+        count = N;// sets the number of elements as the count when count reaches 1 all components are connected
+        id = new int[N];// initialization of the id array size to identify parents
+        sz = new int[N];// initialization of size array size which identifies the number of nodes in the parent node
         for (int i = 0; i < N; ++i) {// iterative loop to initialize each element in the size array and id array
             id[i] = i;// sets the parent of the node to itself
-            sz[i] = 1;// since each element is its own parent, size is 1
+            sz[i] = 1;// since each element is its own parent, size is 1 for each node
         }
     }
 // return count function
     public int count() {
-        return count;
+        return count;// returns the number of connected components
     }
 //returns the root of the node
     private int root(int p) {
-        while (id[p] != p) {//while the root of node is not itself
-            id[p] = id[id[p]]; // path compression
-            p = id[p];
+        while (id[p] != p) {//while the root of the node is not itself
+            id[p] = id[id[p]]; // path compression, which sets the root of of the node to the root of the 2nd degree parent node
+            p = id[p];// sets p to be the root of id[p], of which adds an additional degree of parent node reference
         }
         return p;
     }
-
+// union function which connects two notes
     public void union(int p, int q) {
-        int rootp = root(p);
+        int rootp = root(p);// temp values that store
         int rootq = root(q);
         if (rootp == rootq) return;
         if (sz[rootp] < sz[rootq]) {
             id[rootp] = rootq;
             sz[rootq] += sz[rootp];
-        } else {
+        } 
+        else {
             id[rootq] = rootp;
             sz[rootp] += sz[rootq];
         }
@@ -46,16 +47,16 @@ public class WeightedQuickUnion{
 
     public static void main(String[] args) {
       int 
-        WeightedQuickUnionUF uf = new WeightedQuickUnionUF(10);
-        StdOut.println(uf.count() == 10);
+        WeightedQuickUnion uf = new WeightedQuickUnion(10);
+        System.out.println(uf.count() == 10);
         uf.union(0, 1);
-        StdOut.println(uf.count() == 9);
+        SSystem.out.println(uf.count() == 9);
         uf.union(2, 3);
-        StdOut.println(uf.count() == 8);
+        System.out.println(uf.count() == 8);
         uf.union(0, 2);
-        StdOut.println(uf.count() == 7);
+        System.out.println(uf.count() == 7);
         uf.union(1, 3);
-        StdOut.println(uf.count() == 7);
+        System.out.println(uf.count() == 7);
     }
 }
 
