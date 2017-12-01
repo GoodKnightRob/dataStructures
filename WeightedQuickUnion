@@ -1,0 +1,61 @@
+public class WeightedQuickUnion{
+    private int id[]; // id[i] = parents of node i
+    private int sz[]; // sz[i] = size of node i
+    private int count; // number of connected components
+    
+// Constructor with the number of elements a paramenter
+    public WeightedQuickUnionUF(int N) { 
+        count = N;// sets the number of elements as the count
+        id = new int[N];// initialization of array to identify parents
+        sz = new int[N];//initialization of array that identifies the size the node
+        for (int i = 0; i < N; ++i) {// iterative loop to initialize each element in the size array and id array
+            id[i] = i;// sets the parent of the node to itself
+            sz[i] = 1;// since each element is its own parent, size is 1
+        }
+    }
+// return count function
+    public int count() {
+        return count;
+    }
+//returns the root of the node
+    private int root(int p) {
+        while (id[p] != p) {//while the root of node is not itself
+            id[p] = id[id[p]]; // path compression
+            p = id[p];
+        }
+        return p;
+    }
+
+    public void union(int p, int q) {
+        int rootp = root(p);
+        int rootq = root(q);
+        if (rootp == rootq) return;
+        if (sz[rootp] < sz[rootq]) {
+            id[rootp] = rootq;
+            sz[rootq] += sz[rootp];
+        } else {
+            id[rootq] = rootp;
+            sz[rootp] += sz[rootq];
+        }
+        count--;
+    }
+// checks to see if two nodes are in the same component
+    public boolean connected(int p, int q) {
+        return root(p) == root(q);
+    }
+
+    public static void main(String[] args) {
+      int 
+        WeightedQuickUnionUF uf = new WeightedQuickUnionUF(10);
+        StdOut.println(uf.count() == 10);
+        uf.union(0, 1);
+        StdOut.println(uf.count() == 9);
+        uf.union(2, 3);
+        StdOut.println(uf.count() == 8);
+        uf.union(0, 2);
+        StdOut.println(uf.count() == 7);
+        uf.union(1, 3);
+        StdOut.println(uf.count() == 7);
+    }
+}
+
